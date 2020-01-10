@@ -2,7 +2,7 @@ import React from 'react'
 import { fetcher } from "../../helper"
 
 
-import DaftarAkun from '../DaftarAkun'
+import BukuBesar from '../BukuBesar'
 import JurnalUmum from '../JurnalUmum'
 
 class App extends React.Component {
@@ -23,13 +23,20 @@ class App extends React.Component {
     
     const phTgl = d + '/' + m + '/' + y + ' ' + h + ':' + min + ':' + s
     
-    console.log(details, uraian)
-    
     fetcher('jurnal', 'POST', {
       uraian: uraian,
       tanggal: phTgl,
       details: details
     }).then(data => this.setState({jurnalList: data.jurnal_list}))
+
+    fetcher('akun', 'GET').then(data => this.setState({akunList: data.akun_list}))
+  }
+
+  addAkun = (ref, nama) => {
+    fetcher('akun', 'POST', {
+      ref: ref,
+      nama: nama
+    }).then(data => this.setState({akunList: data.akun_list}))
   }
   
   componentDidMount(){
@@ -41,8 +48,11 @@ class App extends React.Component {
     return (
       <div className="container-fluid">
         <header>
-          <DaftarAkun
+          <BukuBesar
             data={this.state.akunList}
+            methods={{
+              add: this.addAkun
+            }}
           />
           <JurnalUmum
             data={{
