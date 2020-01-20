@@ -29,14 +29,30 @@ const JurnalUmum = ({data, methods}) => {
 
 const JurnalDetail = ({details}) => {
     return(
-        <div className="card-body">
-            <h2>Debit</h2>
+        <div className="card-body mx-3">
+            <div className="row border">
+                <div className="col-8 border text-left">
+                    <h5>Akun</h5>
+                </div>
+                <div className="col-2 border text-left">
+                    <h5>Debit</h5>
+                </div>
+                <div className="col-2 border text-left">
+                    <h5>Kredit</h5>
+                </div>
+            </div>
             {details.map((detail) => (
-                <p>{detail.dk === 'D' ? detail.akun + ' - ' + detail.nominal: () => {}}</p>
-            ))}
-            <h2>Kredit</h2>
-            {details.map((detail) => (
-                <p>{detail.dk === 'K' ? detail.akun + ' - ' + detail.nominal : () => {}}</p>
+                <div className="row border">
+                    <div className="col-8 border text-left">
+                        {detail.akun}
+                    </div>
+                    <div className="col-2 border text-right">
+                        {detail.dk === 'D' ? detail.nominal: () => {}}
+                    </div>
+                    <div className="col-2 border text-right">
+                        {detail.dk === 'K' ? detail.nominal: () => {}}
+                    </div>
+                </div>
             ))}
         </div>
     )
