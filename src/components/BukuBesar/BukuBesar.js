@@ -36,19 +36,33 @@ const AkunDetails = ({details}) => {
 
     return (
         <div className="card-body">
+            <div className="card-body mx-3">
+                <div className="row border">
+                    <div className="col-8 border text-left">
+                        <h5>Uraian</h5>
+                    </div>
+                    <div className="col-2 border text-left">
+                        <h5>Debit</h5>
+                    </div>
+                    <div className="col-2 border text-left">
+                        <h5>Kredit</h5>
+                    </div>
+                </div>
             {details && details.map((detail) => (
-                <div className="m-1 card card-body">
-                    <div className="row">
-                        <div className="col">
-                            <h3>{detail.uraian}</h3>
-                        </div>
-                        <div className={'col text-right lead ' + (detail.dk === 'D' ? 'mr-5' : '')}>
-                            Rp. {detail.nominal}
-                        </div>
+                <div className="row border">
+                    <div className="col-8 border text-left">
+                        {detail.uraian}
+                    </div>
+                    <div className="col-2 border text-right">
+                        {detail.dk === 'D' ? detail.nominal: () => {}}
+                    </div>
+                    <div className="col-2 border text-right">
+                        {detail.dk === 'K' ? detail.nominal: () => {}}
                     </div>
                 </div>
             ))}
-            <div className="m-1 ml-5 card card-body">
+            </div>
+            <div className="mx-3 card card-body">
                 <div className="row">
                     <div className="col">
                         <h3>
@@ -56,7 +70,7 @@ const AkunDetails = ({details}) => {
                         </h3>
                     </div>
                     <div className={'col text-right lead ' + (saldo() >= 0 ? 'mr-5' : '')}>
-                        Rp. {Math.abs(saldo())}
+                        {saldo()}
                     </div>
                 </div>
             </div>

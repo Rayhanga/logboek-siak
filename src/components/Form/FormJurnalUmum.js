@@ -80,6 +80,25 @@ class FormCatatan extends React.Component {
         })
     }
 
+    handleSubmit = () => {
+        this.props.add(this.state.uraian, this.state.catatanList)
+        this.setState({
+            uraian: '',
+            catatanList: [
+                {
+                    akun_ref: 'PK',
+                    nominal: '',
+                    dk: 'D'
+                },
+                {
+                    akun_ref: 'PK',
+                    nominal: '',
+                    dk: 'K'
+                }
+            ]
+        })
+    }
+
     formValidator = () => {
         const arr = this.state.catatanList
         var a, sum = 0, akunValid = false
@@ -130,7 +149,7 @@ class FormCatatan extends React.Component {
                     className="mx-2 btn btn-primary"
                     type="button" 
                     value="Submit"
-                    onClick={() => this.props.add(this.state.uraian, this.state.catatanList)}
+                    onClick={() => this.handleSubmit()}
                 />
             </form>
         )
