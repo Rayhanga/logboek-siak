@@ -34,7 +34,7 @@ export default (props) => {
             ref: ref,
             nama: nama,
             details: fd,
-            periode: data.tmin + ' sampai ' + data.tmax,
+            periode: data.tmin + ' - ' + data.tmax,
             sum: sum
         })
     }
@@ -49,10 +49,11 @@ export default (props) => {
                 <div className="m-3 card">
                     <div className="card-header">
                         <h2>{akun.nama} - {akun.ref}</h2>
-                        <small className="lead">Periode: {akun.periode}</small>
+                        <small className="lead">Periode: {akun.periode.replace(/-/gi, '/')}</small>
                     </div>
                     <div className="card-body">
                         <div className="card-body mx-3">
+                            {akun.details && akun.details.length > 0 &&
                             <div className="row border">
                                 <div className="col-2 border text-left">
                                     <h5>Tanggal</h5>
@@ -67,12 +68,20 @@ export default (props) => {
                                     <h5>Kredit</h5>
                                 </div>
                             </div>
-                        {akun.details && akun.details.map((detail) => (
+                            }
+                            {akun.details && akun.details.length === 0 &&
+                            <div className="row border h-100">
+                                <div className="col border text-center h-100">
+                                    <h3>Tidak ada catatan pada periode ini</h3>
+                                </div>
+                            </div>
+                            }
+                        {akun.details && akun.details.length > 0 && akun.details.map((detail) => (
                             <div className="row border">
                                 <div className="col-2 border text-left">
-                                    {detail.tanggal}
+                                    {detail.tanggal.substring(8,10)}{detail.tanggal.match(/-[0-9]{2}-/)}{detail.tanggal.match(/^[0-9]{4}/)}
                                 </div>
-                                <div className="col-6 border text-left">
+                                <div className="col-6 border textleft">
                                     {detail.uraian}
                                 </div>
                                 <div className="col-2 border text-right">
@@ -84,6 +93,7 @@ export default (props) => {
                             </div>
                         ))}
                         </div>
+                        {akun.details && akun.details.length > 0 &&
                         <div className="mx-3 card card-body">
                             <div className="row">
                                 <div className="col">
@@ -96,6 +106,7 @@ export default (props) => {
                                 </div>
                             </div>
                         </div>
+                        }
                     </div>
                 </div>
             }

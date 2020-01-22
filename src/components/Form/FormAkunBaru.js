@@ -15,7 +15,11 @@ export default (props) => {
     }
 
     const handleSubmit = (event) => {
-        props.add(form.ref, form.nama)
+        props.add(form)
+        setForm({
+            nama: '',
+            ref: ''
+        })
         event.preventDefault()
     }
 

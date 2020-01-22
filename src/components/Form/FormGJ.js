@@ -69,13 +69,13 @@ export default ({akun, show, add}) => {
         setForm({
             tanggal: name === 'tanggal' ? value : form.tanggal,
             uraian: name === 'uraian' ? value : form.uraian, 
-            details:form.details
+            details: form.details
         })
         formValidator()
     }
 
     const handleSubmit = (event) => {
-        // add(uraian, dJurnal)
+        add(form)
         console.log(form)
         setForm({
             uraian: '',
@@ -153,6 +153,7 @@ export default ({akun, show, add}) => {
                         className="mx-2 btn btn-primary"
                         type="submit" 
                         value="Submit"
+                        disabled={formValidator().sum !== 0}
                     />
                 </form>
             </div>

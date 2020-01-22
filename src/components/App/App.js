@@ -6,13 +6,11 @@ import JurnalUmum from '../Views/JurnalUmum'
 import BukuBesar from '../Views/BukuBesar'
 
 export default () => {
-  const [state, setState] = useState({
-    akunList: [],
-    jurnalList: [],
-    barangList: [],
-  })
+  const [akun, setAkun] = useState([])
+  const [jurnal, setJurnal] = useState([])
+  const [barang, setBarang] = useState([])
 
-  const addJurnal = (uraian, details, tanggal) => {
+  const addJurnal = ({uraian, tanggal, details}) => {
     const date = new Date()
     const d = date.getDate() < 10 ? 0 + date.getDate().toString() : date.getDate()
     const m = date.getMonth() + 1 < 10 ? 0 + (date.getMonth() + 1).toString() : date.getMonth()
@@ -23,54 +21,29 @@ export default () => {
     const s = date.getSeconds() < 10 ? 0 + date.getSeconds().toString() : date.getSeconds()
     
     const phTgl = d + '/' + m + '/' + y + ' ' + h + ':' + min + ':' + s
-    
-    fetcher('jurnal', 'POST', {
+
+    const newJurnal = {
       uraian: uraian,
       tanggal: phTgl,
       details: details
-    }).then(data => setState({
-      akunList: state.akunList,
-      jurnalList: data.jurnal_list,
-      barangList: state.barangList,
-    }))
+    }
+    
+    fetcher('jurnal', 'POST', newJurnal).then(data => setJurnal(data.jurnal_list))
 
-    fetcher('akun', 'GET').then(data => setState({
-      akunList: data.akun_list,
-      jurnalList: state.jurnalList,
-      barangList: state.barangList,
-    }))
+    fetcher('akun', 'GET').then(data => setAkun(data.akun_list))
   }
 
-  const addAkun = (ref, nama) => {
-    fetcher('akun', 'POST', {
-      ref: ref,
-      nama: nama
-    }).then(data => setState({
-      akunList: data.akun_list,
-      jurnalList: state.jurnalList,
-      barangList: state.barangList,
-    }))
+  const addAkun = (akunBaru) => {
+    fetcher('akun', 'POST', akunBaru).then(data => setAkun(data.akun_list))
   }
   
   useEffect(()=>{
-    fetcher('akun', 'GET').then(data => console.log(data))
-    fetcher('jurnal', 'GET').then(data => console.log(data))
-    fetcher('barang', 'GET').then(data => console.log(data))
-    // fetcher('akun', 'GET').then(data => setState({
-      // akunList: data.akun_list,
-      // jurnalList: state.jurnalList,
-      // barangList: state.barangList,
-    // })
-    // fetcher('jurnal', 'GET').then(data => setState({
-      // akunList: state.akunList,
-      // jurnalList: data.jurnal_list,
-      // barangList: state.barangList,
-    // }))
-    // fetcher('barang', 'GET').then(data => setState({
-      // akunList: state.akunList,
-      // jurnalList: state.jurnalList,
-      // barangList: data.barang_list,
-    // }))
+    // fetcher('akun', 'GET').then(data => console.log(data))
+    // fetcher('jurnal', 'GET').then(data => console.log(data))
+    // fetcher('barang', 'GET').then(data => console.log(data))
+    fetcher('akun', 'GET').then(data => setAkun(data.akun_list))
+    fetcher('jurnal', 'GET').then(data => setJurnal(data.jurnal_list))
+    fetcher('barang', 'GET').then(data => setBarang(data.barang_list))
   },[])
 
   return (
@@ -78,19 +51,19 @@ export default () => {
       <main>
         <JurnalUmum
           data={{
-            akun: state.akunList,
-            jurnal: state.jurnalList
+            akun: akun,
+            jurnal: jurnal
           }}
           methods={{
             add: addJurnal
           }}
         />
         <DaftarAkun
-          data={state.akunList}
+          data={akun}
           add={addAkun}
         />
         <BukuBesar
-          data={state.akunList}
+          data={akun}
         />
       </main>
     </div>
