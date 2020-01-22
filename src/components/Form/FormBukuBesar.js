@@ -1,42 +1,62 @@
 import React, { useState } from 'react'
 
-export default () => {
+import { formatDate } from '../../helper'
+
+export default (props) => {
     const [form, setForm] = useState({
-        
+        ref: '',
+        tmin: formatDate(Date.now()),
+        tmax: ''
     })
 
-    const handleInput = (e) => {
-        const { name, value } = e.target
+    const { data } = props
+
+    const handleInput = (event) => {
+        const { name, value } = event.target
         setForm({
-            nama: name === "nama" ? value : form.nama,
-            ref: name === "ref" ? value.slice(0,3) : form.ref
+            ref: name === "ref" ? value : form.ref,
+            tmin: name === "tmin" ? value : form.tmin,
+            tmax: name === "tmax" ? value : form.tmax
         })
     }
 
+    const handleSubmit = (event) => {
+        props.select(form)
+        event.preventDefault()
+    }
+
     return(
-        <div className={props.show ? 'd-block card mx-auto m-3' : 'd-none'}>
+        <div className="d-block card mx-auto m-3">
             <div className="card-header">
-                <h1>Tambah Akun Baru</h1> 
+                <h1>Buku Besar</h1> 
             </div>
             <div className="card-body">
-                <form className="form">
-                    <div className="form-inline form-group">
-                        <label className="form-control">Ref: </label>
-                        <input className="mx-2 form-control" type="number" name="ref" 
-                            value={form.ref}
+                <form className="form" onSubmit={(e) => handleSubmit(e)}>
+                    <div className="form-inline form-group"> 
+                        <label className="form-control">{form.ref ? form.ref : '---'}</label>
+                        <select className="form-control mx-2" value={form.ref} name="ref" onChange={(e) => handleInput(e)} required>
+                            <option value='' disabled>Pilih Akun</option>
+                            {data && data.map((item) => (
+                                <option key={item.ref} value={item.ref}>{item.nama}</option>
+                            ))}
+                        </select>
+                        <label className="form-control">Periode: </label>
+                        <input className="mx-2 form-control" type="date" name="tmin"
+                            max={form.tmax}
+                            value={form.tmin}
                             onChange={(e) => handleInput(e)}
                         />
-                        <label className="form-control">Nama: </label>
-                        <input className="mx-2 form-control" type="text" name="nama" 
-                            value={form.nama}
+                        <label className="form-control">-</label>
+                        <input className="mx-2 form-control" type="date" name="tmax" required
+                            min={form.tmin}
+                            value={form.tmax}
                             onChange={(e) => handleInput(e)}
                         />
                     </div>
                     <input 
                         className="btn btn-primary"
-                        type="button" 
+                        type="submit" 
                         value="Submit"
-                        onClick={() => props.add(form.ref, form.nama)}
                     />
                 </form>
             </div>

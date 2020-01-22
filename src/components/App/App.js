@@ -3,6 +3,7 @@ import { fetcher } from "../../helper"
 
 import DaftarAkun from '../Views/DaftarAkun'
 import JurnalUmum from '../Views/JurnalUmum'
+import BukuBesar from '../Views/BukuBesar'
 
 export default () => {
   const [akunList, setAL] = useState([])
@@ -53,9 +54,12 @@ export default () => {
             add: addJurnal
           }}
         /> */}
-        <DaftarAkun
+        {/* <DaftarAkun
           data={akunList}
           add={addAkun}
+        /> */}
+        <BukuBesar
+          data={akunList}
         />
       </main>
     </div>
