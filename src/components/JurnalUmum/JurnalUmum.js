@@ -1,59 +1,59 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import FormJurnalUmum from '../Form/FormJurnalUmum'
+import FormGJ from '../Form/FormGJ'
 
-export default (props) => {
-    return <JurnalUmum data={props.data} methods={props.methods}/>
-}
-const JurnalUmum = ({data, methods}) => {
-    const [showUmum, setShowUmum] = React.useState(false)
+export default ({data, methods}) => {
+    const [showUmum, setShowUmum] = useState(false)
     const { akun, jurnal } = data ? data : () => {}
     const { add } = methods ? methods : () => {}
 
-    return (
+    return(
         <div className="container">
             <h1>Jurnal Umum</h1>
             <input className="btn btn-primary" type="button" value="Catat Jurnal Umum" onClick={() => setShowUmum(!showUmum)}/>
-            <FormJurnalUmum akun={akun} show={showUmum} add={add}/>
+            <FormGJ akun={akun} show={showUmum} add={add}/>
             {jurnal && jurnal.map((item) => (
-                <div className="m-3 card" key={item.id}>
-                    <div className="card-header">
-                        <h2>{item.uraian} - {item.tanggal}</h2>
-                    </div>
-                    <JurnalDetail details={item.details}/>
-                </div>
+                <JurnalItem item={item}/>
             ))}
         </div>
     )
 }
 
-const JurnalDetail = ({details}) => {
+const JurnalItem = ({item}) => {
+    const [show, setShow] = useState(false)
+    const { details } = item
     return(
-        <div className="card-body mx-3">
-            <div className="row border">
-                <div className="col-8 border text-left">
-                    <h5>Akun</h5>
-                </div>
-                <div className="col-2 border text-left">
-                    <h5>Debit</h5>
-                </div>
-                <div className="col-2 border text-left">
-                    <h5>Kredit</h5>
+        <div className="card m-3" key={item.id}>
+            <div className="card-header">
+                <h2>{item.uraian} - {item.tanggal}</h2>
+                <input className="btn btn-primary" type="button" value="Lihat Detail" onClick={() => setShow(!show)}/>
+                <div className={show ? 'd-block card mx-auto m-3' : 'd-none'}>
+                    <div className="row border">
+                        <div className="col-8 border text-left">
+                            <h5>Akun</h5>
+                        </div>
+                        <div className="col-2 border text-left">
+                            <h5>Debit</h5>
+                        </div>
+                        <div className="col-2 border text-left">
+                            <h5>Kredit</h5>
+                        </div>
+                    </div>
+                    {details && details.map((detail) => (
+                        <div className="row border">
+                            <div className="col-8 border text-left">
+                                {detail.akun}
+                            </div>
+                            <div className="col-2 border text-right">
+                                {detail.dk === 'D' ? detail.nominal: () => {}}
+                            </div>
+                            <div className="col-2 border text-right">
+                                {detail.dk === 'K' ? detail.nominal: () => {}}
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
-            {details.map((detail) => (
-                <div className="row border">
-                    <div className="col-8 border text-left">
-                        {detail.akun}
-                    </div>
-                    <div className="col-2 border text-right">
-                        {detail.dk === 'D' ? detail.nominal: () => {}}
-                    </div>
-                    <div className="col-2 border text-right">
-                        {detail.dk === 'K' ? detail.nominal: () => {}}
-                    </div>
-                </div>
-            ))}
         </div>
     )
 }

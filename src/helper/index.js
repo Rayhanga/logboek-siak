@@ -11,9 +11,6 @@ export const fetcher = async (uri, method, payload) => {
       },
       body: payload ? JSON.stringify(payload) : null
     })
-  .catch((error) => {
-    console.error(error)
-  })
   .then(res => res.json())
 
   return response

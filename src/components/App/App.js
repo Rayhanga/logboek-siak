@@ -1,17 +1,15 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { fetcher } from "../../helper"
-
+import './App.css'
 
 import BukuBesar from '../BukuBesar'
 import JurnalUmum from '../JurnalUmum'
 
-class App extends React.Component {
-  state = {
-    akunList: [],
-    jurnalList: []
-  }
+export default () => {
+  const [akunList, setAL] = useState([])
+  const [jurnalList, setJL] = useState([])
 
-  addJurnal = (uraian, details, tanggal) => {
+  const addJurnal = (uraian, details, tanggal) => {
     const date = new Date()
     const d = date.getDate() < 10 ? 0 + date.getDate().toString() : date.getDate()
     const m = date.getMonth() + 1 < 10 ? 0 + (date.getMonth() + 1).toString() : date.getMonth()
@@ -27,46 +25,36 @@ class App extends React.Component {
       uraian: uraian,
       tanggal: phTgl,
       details: details
-    }).then(data => this.setState({jurnalList: data.jurnal_list}))
+    }).then(data => setAL(data.jurnal_list))
 
-    fetcher('akun', 'GET').then(data => this.setState({akunList: data.akun_list}))
+    fetcher('akun', 'GET').then(data => setAL(data.akun_list))
   }
 
-  addAkun = (ref, nama) => {
+  const addAkun = (ref, nama) => {
     fetcher('akun', 'POST', {
       ref: ref,
       nama: nama
-    }).then(data => this.setState({akunList: data.akun_list}))
+    }).then(data => setAL(data.akun_list))
   }
   
-  componentDidMount(){
-    fetcher('akun', 'GET').then(data => this.setState({akunList: data.akun_list}))
-    fetcher('jurnal', 'GET').then(data => this.setState({jurnalList: data.jurnal_list}))
-  }
+  useEffect(()=>{
+    fetcher('akun', 'GET').then(data => setAL(data.akun_list))
+    fetcher('jurnal', 'GET').then(data => setJL(data.jurnal_list))
+  },[])
 
-  render(){
-    return (
-      <div className="container-fluid">
-        <header>
-          <BukuBesar
-            data={this.state.akunList}
-            methods={{
-              add: this.addAkun
-            }}
-          />
-          <JurnalUmum
-            data={{
-              akun: this.state.akunList,
-              jurnal: this.state.jurnalList
-            }}
-            methods={{
-              add: this.addJurnal
-            }}
-          />
-        </header>
-      </div>
-    )
-  }
+  return (
+    <div className="container-fluid">
+      <main>
+        <JurnalUmum
+          data={{
+            akun: akunList,
+            jurnal: jurnalList
+          }}
+          methods={{
+            add: addJurnal
+          }}
+        />
+      </main>
+    </div>
+  )
 }
-
-export default App
