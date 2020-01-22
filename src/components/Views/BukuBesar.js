@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import jsPDF from 'jspdf'
+import html2canvas from 'html2canvas'
 
 import FormBukuBesar from '../Form/FormBukuBesar'
 
@@ -39,6 +41,17 @@ export default (props) => {
         })
     }
 
+    const printPDF = (akun) => {
+        const {nama, periode} = akun
+		const filename  = nama+'_'+periode+'.pdf'
+
+		html2canvas(document.querySelector('#bukuBesar'),{scale:1}).then(canvas => {
+			let pdf = new jsPDF('l', 'mm', 'a4');
+			pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 298, 210);
+			pdf.save(filename);
+		});
+    }
+
     return(
         <div className="container">
             <FormBukuBesar
@@ -46,9 +59,9 @@ export default (props) => {
                 select={select}
             />
             {akun && 
-                <div className="m-3 card">
+                <div className="m-3 card" id="bukuBesar">
                     <div className="card-header">
-                        <h2>{akun.nama} - {akun.ref}</h2>
+                        <h2>{akun.nama}</h2>
                         <small className="lead">Periode: {akun.periode.replace(/-/gi, '/')}</small>
                     </div>
                     <div className="card-body">
@@ -110,6 +123,9 @@ export default (props) => {
                     </div>
                 </div>
             }
+        {akun &&
+            <input disabled={akun.details.length === 0} onClick={() => printPDF(akun)} className="btn btn-primary btn-block m-3" type="button" value="Print"/>
+        }
         </div>
     )
 }
