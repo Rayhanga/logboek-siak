@@ -107,7 +107,7 @@ export default () => {
           </span>
           <span onClick={() => updateData()}>
             <Link>
-              <i className="fa fa-refresh" style={{fontSize: '24px'}}/> Refresh Data
+              <i className="fa fa-refresh" style={{fontSize: '24px'}}/> Perbarui Data
             </Link>
           </span>
         </div>

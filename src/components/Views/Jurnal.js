@@ -1,17 +1,23 @@
 import React, { useState } from 'react'
 
 import FormGJ from '../Form/FormGJ'
+import FormRJ from '../Form/FormRJ'
 
 export default ({data, methods}) => {
-    const [showUmum, setShowUmum] = useState(false)
+    const [show, setShow] = useState({
+        umum: false,
+        revisi: false
+    })
     const { akun, jurnal } = data ? data : () => {}
     const { add } = methods ? methods : () => {}
 
     return(
         <div className="container">
             <h1>Jurnal</h1>
-            <input className="btn btn-primary" type="button" value="Catat Jurnal Umum" onClick={() => setShowUmum(!showUmum)}/>
-            <FormGJ akun={akun} show={showUmum} add={add}/>
+            <input className="btn btn-primary" type="button" value="Catat Jurnal Umum" onClick={() => setShow({umum: !show.umum, revisi: false})}/>
+            <input className="btn btn-primary mx-2" type="button" value="Catat Jurnal Revisi" onClick={() => setShow({umum: false, revisi: !show.revisi})}/>
+            <FormGJ akun={akun} show={show.umum} add={add}/>
+            <FormRJ akun={akun} show={show.revisi} add={add}/>
             {jurnal && jurnal.map((item) => (
                 <JurnalItem item={item}/>
             ))}
