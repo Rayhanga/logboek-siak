@@ -6,8 +6,11 @@ import JurnalUmum from '../Views/JurnalUmum'
 import BukuBesar from '../Views/BukuBesar'
 
 export default () => {
-  const [akunList, setAL] = useState([])
-  const [jurnalList, setJL] = useState([])
+  const [state, setState] = useState({
+    akunList: [],
+    jurnalList: [],
+    barangList: [],
+  })
 
   const addJurnal = (uraian, details, tanggal) => {
     const date = new Date()
@@ -25,21 +28,49 @@ export default () => {
       uraian: uraian,
       tanggal: phTgl,
       details: details
-    }).then(data => setAL(data.jurnal_list))
+    }).then(data => setState({
+      akunList: state.akunList,
+      jurnalList: data.jurnal_list,
+      barangList: state.barangList,
+    }))
 
-    fetcher('akun', 'GET').then(data => setAL(data.akun_list))
+    fetcher('akun', 'GET').then(data => setState({
+      akunList: data.akun_list,
+      jurnalList: state.jurnalList,
+      barangList: state.barangList,
+    }))
   }
 
   const addAkun = (ref, nama) => {
     fetcher('akun', 'POST', {
       ref: ref,
       nama: nama
-    }).then(data => setAL(data.akun_list))
+    }).then(data => setState({
+      akunList: data.akun_list,
+      jurnalList: state.jurnalList,
+      barangList: state.barangList,
+    }))
   }
   
   useEffect(()=>{
-    fetcher('akun', 'GET').then(data => setAL(data.akun_list))
-    fetcher('jurnal', 'GET').then(data => setJL(data.jurnal_list))
+    fetcher('akun', 'GET').then(data => console.log(data))
+    fetcher('jurnal', 'GET').then(data => console.log(data))
+    fetcher('barang', 'GET').then(data => console.log(data))
+    // fetcher('akun', 'GET').then(data => setState({
+      // akunList: data.akun_list,
+      // jurnalList: state.jurnalList,
+      // barangList: state.barangList,
+    // })
+    // fetcher('jurnal', 'GET').then(data => setState({
+      // akunList: state.akunList,
+      // jurnalList: data.jurnal_list,
+      // barangList: state.barangList,
+    // }))
+    // fetcher('barang', 'GET').then(data => setState({
+      // akunList: state.akunList,
+      // jurnalList: state.jurnalList,
+      // barangList: data.barang_list,
+    // }))
   },[])
 
   return (
@@ -47,19 +78,19 @@ export default () => {
       <main>
         <JurnalUmum
           data={{
-            akun: akunList,
-            jurnal: jurnalList
+            akun: state.akunList,
+            jurnal: state.jurnalList
           }}
           methods={{
             add: addJurnal
           }}
         />
-        {/* <DaftarAkun
-          data={akunList}
+        <DaftarAkun
+          data={state.akunList}
           add={addAkun}
-        /> */}
+        />
         <BukuBesar
-          data={akunList}
+          data={state.akunList}
         />
       </main>
     </div>
