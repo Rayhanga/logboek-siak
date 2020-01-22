@@ -1,8 +1,11 @@
 import React, { useState } from "react"
 
+import { formatDate } from '../../helper'
+
 export default ({akun, show, add}) => {
     const [form, setForm] = useState({
         uraian: '',
+        tanggal: formatDate(Date.now()),
         details: [
             {
                 akun_ref: '',
@@ -61,26 +64,31 @@ export default ({akun, show, add}) => {
         formValidator()
     }
 
-    const handleUraian = (event) => {
-        const { value } = event.target
-        setForm({uraian: value, details:form.details})
+    const handleInput = (event) => {
+        const { name, value } = event.target
+        setForm({
+            tanggal: name === 'tanggal' ? value : form.tanggal,
+            uraian: name === 'uraian' ? value : form.uraian, 
+            details:form.details
+        })
         formValidator()
     }
 
     const handleSubmit = (event) => {
         // add(uraian, dJurnal)
-        console.log(form.uraian, form.details)
+        console.log(form)
         setForm({
             uraian: '',
+            tanggal: formatDate(Date.now()),
             details:
             [
                 {
-                    akun_ref: 'PK',
+                    akun_ref: '',
                     nominal: '',
                     dk: 'D'
                 },
                 {
-                    akun_ref: 'PK',
+                    akun_ref: '',
                     nominal: '',
                     dk: 'K'
                 }
@@ -120,11 +128,13 @@ export default ({akun, show, add}) => {
                         <input className="mx-2 form-control" type="text" name="uraian"
                             required 
                             value={form.uraian}
-                            onChange={(e) => handleUraian(e)}
+                            onChange={(e) => handleInput(e)}
                         />
                         <label className="form-control">Tanggal: </label>
-                        <input className="mx-2 form-control" type="text" name="tanggal" disabled
-                            value={new Date().getDate() + '/' + (new Date().getMonth() + 1 )+ '/' + new Date().getFullYear()}
+                        <input className="mx-2 form-control" type="date" name="tanggal"
+                            required
+                            value={form.tanggal}
+                            onChange={(e) => handleInput(e)}
                         />
                     </div>
                     {form.details && form.details.map((catatan, index) => (

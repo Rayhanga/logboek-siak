@@ -45,7 +45,7 @@ export default () => {
   return (
     <div className="container-fluid">
       <main>
-        {/* <JurnalUmum
+        <JurnalUmum
           data={{
             akun: akunList,
             jurnal: jurnalList
@@ -53,7 +53,7 @@ export default () => {
           methods={{
             add: addJurnal
           }}
-        /> */}
+        />
         {/* <DaftarAkun
           data={akunList}
           add={addAkun}
