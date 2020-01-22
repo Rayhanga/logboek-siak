@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { fetcher } from "../../helper"
-import './App.css'
 
 import BukuBesar from '../BukuBesar'
 import JurnalUmum from '../JurnalUmum'
