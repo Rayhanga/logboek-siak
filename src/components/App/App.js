@@ -7,17 +7,19 @@ import {
 } from 'react-router-dom'
 import { fetcher } from "../../helper"
 
+import './App.css'
+
 import DaftarAkun from '../Views/DaftarAkun'
 import Jurnal from '../Views/Jurnal'
 import BukuBesar from '../Views/BukuBesar'
-
-import './App.css'
+import LandingPage from '../Views/LandingPage'
+import DaftarBarang from '../Views/DaftarBarang'
 
 export default () => {
   const [akun, setAkun] = useState([])
   const [jurnal, setJurnal] = useState([])
   const [barang, setBarang] = useState([])
-  const [show , setShow] = useState(false)
+  const [show , setShow] = useState(true)
 
   const addJurnal = ({uraian, tanggal, details}) => {
     const date = new Date()
@@ -45,6 +47,10 @@ export default () => {
   const addAkun = (akunBaru) => {
     fetcher('akun', 'POST', akunBaru).then(data => setAkun(data.akun_list))
   }
+  
+  const addBarang = (barangBaru) => {
+    fetcher('barang', 'POST', barangBaru).then(data => setBarang(data.barang_list))
+  }
 
   const updateData = () => {
     setShow(!show)
@@ -64,34 +70,35 @@ export default () => {
     <Router>
       <div className="container-fluid h-100">
       <div className="row h-100">
-        <div className={show ? 'vertical-menu h-100' : 'd-none'}>
+        {show &&
+        <div className='vertical-menu h-100'>
           <span className="pointer" onClick={() => setShow(!show)}><h3>LogBoek</h3></span>
-          <span>
+          <span onClick={() => updateData()}>
             <Link to="/">
               <i className="fa fa-home" style={{fontSize: '24px'}}/> Landing Page
             </Link>
           </span>
-          <span>
+          <span onClick={() => updateData()}>
             <Link to="/jurnal">
               <i className="fa fa-book" style={{fontSize: '24px'}}/> Jurnal
             </Link>
           </span>
-          <span>
+          <span onClick={() => updateData()}>
             <Link to="/bukubesar">
               <i className="fa fa-bank" style={{fontSize: '24px'}}/> Buku Besar
             </Link>
           </span>
-          <span>
+          <span onClick={() => updateData()}>
             <Link to="/pos">
               <i className="fa fa-money" style={{fontSize: '24px'}}/> <i>Point of Sale</i> (POS)
             </Link>
           </span>
-          <span>
+          <span onClick={() => updateData()}>
             <Link to="/barang">
               <i className="fa fa-archive" style={{fontSize: '24px'}}/> Manajemen Barang
             </Link>
           </span>
-          <span>
+          <span onClick={() => updateData()}>
             <Link to="/pengaturan">
               <i className="fa fa-cog" style={{fontSize: '24px'}}/> Pengaturan
             </Link>
@@ -102,13 +109,14 @@ export default () => {
             </Link>
           </span>
         </div>
+        }
         <main className="col-12">
         <button className="vm-btn btn" onClick={() => setShow(!show)}>
           <i className="fa fa-align-justify" style={{fontSize: '24px'}}/>
         </button>
       <Switch>
         <Route exact path="/">
-          <h1>Hi</h1>
+          <LandingPage/>
         </Route>
         <Route exact path="/jurnal">
           <Jurnal
@@ -130,6 +138,10 @@ export default () => {
           <DaftarAkun
             data={akun}
             add={addAkun}
+          />
+          <DaftarBarang
+            data={barang}
+            add={addBarang}
           />
         </Route>
       </Switch>

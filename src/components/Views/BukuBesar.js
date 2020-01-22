@@ -34,7 +34,7 @@ export default (props) => {
             ref: ref,
             nama: nama,
             details: fd,
-            periode: data.tmin + ' - ' + data.tmax,
+            periode: data.tmin + ' : ' + data.tmax,
             sum: sum
         })
     }
