@@ -118,7 +118,13 @@ export default () => {
         </button>
       <Switch>
         <Route exact path="/">
-          <LandingPage/>
+          <LandingPage
+            data={{
+              akun: akun,
+              jurnal: jurnal,
+              barang: barang
+            }}
+          />
         </Route>
         <Route exact path="/jurnal">
           <Jurnal
