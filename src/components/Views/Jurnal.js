@@ -9,7 +9,7 @@ export default ({data, methods}) => {
 
     return(
         <div className="container">
-            <h1>Jurnal Umum</h1>
+            <h1>Jurnal</h1>
             <input className="btn btn-primary" type="button" value="Catat Jurnal Umum" onClick={() => setShowUmum(!showUmum)}/>
             <FormGJ akun={akun} show={showUmum} add={add}/>
             {jurnal && jurnal.map((item) => (
