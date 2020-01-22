@@ -47,7 +47,7 @@ export default (props) => {
 
 		html2canvas(document.querySelector('#bukuBesar'),{scale:1}).then(canvas => {
 			let pdf = new jsPDF('l', 'mm', 'a4');
-			pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 298, 210);
+			pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, pdf.internal.pageSize.getHeight()/4, pdf.internal.pageSize.getWidth(), 0);
 			pdf.save(filename);
 		});
     }
