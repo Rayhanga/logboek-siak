@@ -14,6 +14,8 @@ import Jurnal from '../Views/Jurnal'
 import BukuBesar from '../Views/BukuBesar'
 import LandingPage from '../Views/LandingPage'
 import DaftarBarang from '../Views/DaftarBarang'
+import ManajemenBarang from '../Views/ManajemenBarang'
+import PointOfSale from '../Views/PointOfSale'
 
 export default () => {
   const [akun, setAkun] = useState([])
@@ -143,6 +145,12 @@ export default () => {
             data={barang}
             add={addBarang}
           />
+        </Route>
+        <Route exact path="/barang">
+          <ManajemenBarang/>
+        </Route>
+        <Route exact path="/pos">
+          <PointOfSale/>
         </Route>
       </Switch>
         </main>
