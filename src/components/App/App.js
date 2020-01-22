@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { fetcher } from "../../helper"
 
-import BukuBesar from '../BukuBesar'
-import JurnalUmum from '../JurnalUmum'
+import DaftarAkun from '../Views/DaftarAkun'
+import JurnalUmum from '../Views/JurnalUmum'
 
 export default () => {
   const [akunList, setAL] = useState([])
@@ -44,7 +44,7 @@ export default () => {
   return (
     <div className="container-fluid">
       <main>
-        <JurnalUmum
+        {/* <JurnalUmum
           data={{
             akun: akunList,
             jurnal: jurnalList
@@ -52,6 +52,10 @@ export default () => {
           methods={{
             add: addJurnal
           }}
+        /> */}
+        <DaftarAkun
+          data={akunList}
+          add={addAkun}
         />
       </main>
     </div>
