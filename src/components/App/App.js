@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom'
 import { fetcher } from "../../helper"
 
+import brand from '../../static/brand.png'
 import './App.css'
 
 import DaftarAkun from '../Views/DaftarAkun'
@@ -74,7 +75,11 @@ export default () => {
       <div className="row h-100">
         {show &&
         <div className='vertical-menu h-100'>
-          <span className="pointer" onClick={() => setShow(!show)}><h3>LogBoek</h3></span>
+          <span className="pointer" onClick={() => setShow(!show)}>
+            <div className="text-center">
+              <img style={{width: '15vh', borderRadius: '25px'}} src={brand}/>
+            </div>
+          </span>
           <span onClick={() => updateData()}>
             <Link to="/">
               <i className="fa fa-home" style={{fontSize: '24px'}}/> Landing Page

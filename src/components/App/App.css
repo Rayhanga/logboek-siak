@@ -1,12 +1,16 @@
 .vertical-menu {
     width: 30vh; /* Set a width if you like */
-    background-color: #eee;
+    background: rgb(102,195,199);
+    background: -moz-linear-gradient(180deg, rgba(102,195,199,1) 0%, rgba(160,241,239,1) 76%);
+    background: -webkit-linear-gradient(180deg, rgba(102,195,199,1) 0%, rgba(160,241,239,1) 76%);
+    background: linear-gradient(180deg, rgba(102,195,199,1) 0%, rgba(160,241,239,1) 76%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#66c3c7",endColorstr="#a0f1ef",GradientType=1);
     position: fixed;
     z-index: 3;
   }
   
   .vertical-menu span, a {
-    background-color: #eee; /* Grey background color */
+    background: rgb(38,147,152, 0);
     color: black; /* Black text color */
     display: block; /* Make the links appear below each other */
     padding: 12px; /* Add some padding */
@@ -16,7 +20,7 @@
   .vertical-menu a:hover {
     color: black; /* Black text color */
     text-decoration: none;
-    background-color: #ccc; /* Dark grey background on mouse-over */
+    background-color: #5f8f8e; /* Dark grey background on mouse-over */
     cursor: pointer;
   }
   
@@ -31,6 +35,32 @@
 
 .main {
   width: 70vh;
+}
+
+.btn-primary {
+  color: black;
+  background-color: rgb(102,195,199);
+  border-color: rgb(102,195,199);
+}
+.btn-primary:hover {
+  color: black;
+  background-color: rgb(160, 190, 245);
+  border-color: rgb(160, 190, 245);
+}
+.btn-primary:active{
+  color: black;
+  background-color: rgb(160, 190, 245);
+  border-color: rgb(160, 190, 245);
+}
+.btn-primary:focus{
+  color: black;
+  background-color: rgb(160, 190, 245);
+  border-color: rgb(160, 190, 245);
+}
+.btn-primary:disabled{
+  color: black;
+  background-color: rgb(160, 190, 245);
+  border-color: rgb(160, 190, 245);
 }
 
 .vm-btn{

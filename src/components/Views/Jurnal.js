@@ -17,7 +17,7 @@ export default ({data, methods}) => {
             <input className="btn btn-primary" type="button" value="Catat Jurnal Umum" onClick={() => setShow({umum: !show.umum, revisi: false})}/>
             <input className="btn btn-primary mx-2" type="button" value="Catat Jurnal Revisi" onClick={() => setShow({umum: false, revisi: !show.revisi})}/>
             <FormGJ akun={akun} show={show.umum} add={add}/>
-            <FormRJ akun={akun} show={show.revisi} add={add}/>
+            <FormRJ jurnal={jurnal} akun={akun} show={show.revisi} add={add}/>
             {jurnal && jurnal.map((item) => (
                 <JurnalItem item={item}/>
             ))}

@@ -2,18 +2,19 @@ import React, { useState } from "react"
 
 import { formatDate } from '../../helper'
 
-export default ({akun, show, add}) => {
+export default ({jurnal, akun, show, add}) => {
+    const [selectedJurnal, selectJurnal] = useState('')
     const [form, setForm] = useState({
         uraian: '',
         tanggal: formatDate(Date.now()),
         details: [
             {
-                akun_ref: '',
+                akun: '',
                 nominal: '',
                 dk: 'D'
             },
             {
-                akun_ref: '',
+                akun: '',
                 nominal: '',
                 dk: 'K'
             }
@@ -24,7 +25,7 @@ export default ({akun, show, add}) => {
         formValidator()
         const { sum } = formValidator()
         const newArr = {
-            akun_ref: '',
+            akun: '',
             nominal: sum === 0 ? '' : (Math.abs(sum)).toString(),
             dk: sum <= 0 ? 'D' : 'K'
         }
@@ -51,7 +52,7 @@ export default ({akun, show, add}) => {
         const { name, value } = event.target
 
         newArr[id] = {
-            akun_ref: name === "akun" ? value : newArr[id].akun_ref,
+            akun: name === "akun" ? value : newArr[id].akun,
             nominal: name === "nominal" ? value : newArr[id].nominal,
             dk: name === "dk" ? value : newArr[id].dk
         }
@@ -74,7 +75,23 @@ export default ({akun, show, add}) => {
         formValidator()
     }
 
+    const handleJurnal = (event) => {
+        const { value } = event.target
+
+        selectJurnal(value)
+        const sj = jurnal.filter((j) => {return j.uraian === value})
+        if(sj[0]){
+            console.log(sj[0].details)
+            setForm({
+                tanggal: sj[0].tanggal.match(/[0-9]{4}\/[0-9]{2}\/[0-9]{2}/),
+                uraian: sj[0].uraian + ' (Revisi ' + formatDate(Date.now()) + ')',
+                details: sj[0].details
+            })
+        }
+    }
+
     const handleSubmit = (event) => {
+        
         add(form)
         console.log(form)
         setForm({
@@ -83,12 +100,12 @@ export default ({akun, show, add}) => {
             details:
             [
                 {
-                    akun_ref: '',
+                    akun: '',
                     nominal: '',
                     dk: 'D'
                 },
                 {
-                    akun_ref: '',
+                    akun: '',
                     nominal: '',
                     dk: 'K'
                 }
@@ -101,18 +118,18 @@ export default ({akun, show, add}) => {
         const { details, uraian } = form
         var a, sum = 0, akunValid = false
         for(a in details){
-            const { akun_ref, dk, nominal } = details[a]
-            akunValid = !(akun_ref === 'PK') 
+            const { akun, dk, nominal } = details[a]
+            akunValid = !(akun === 'PK') 
             sum = dk === 'D' ? sum + parseFloat(nominal) : sum - parseFloat(nominal)
         }
 
-        const balanceValid = sum === 0
-        const uraianValid = uraian !== '' || uraian.match(/^ *$/) === null
-        const notEmpty = details.length >= 2
+        // const balanceValid = sum === 0
+        // const uraianValid = uraian !== '' || uraian.match(/^ *$/) === null
+        // const notEmpty = details.length >= 2
 
         return {
             sum: sum,
-            valid: akunValid && balanceValid && uraianValid && notEmpty
+            // valid: akunValid && balanceValid && uraianValid && notEmpty
         }
     }
 
@@ -123,38 +140,51 @@ export default ({akun, show, add}) => {
             </div>
             <div className="card-body">
                 <form className="form" onSubmit={(event) => handleSubmit(event)}>
-                    <div className="form-inline form-group">
-                        <label className="form-control">Uraian: </label>
-                        <input className="mx-2 form-control" type="text" name="uraian"
-                            required 
-                            value={form.uraian}
-                            onChange={(e) => handleInput(e)}
+                    <div className="d-block"> 
+                        <div className="form-inline form-group">
+                            <label className="form-control">Jurnal yang akan direvisi: </label>
+                            <select className="mx-2 form-control" name="jurnal" value={selectedJurnal} onChange={(event) => handleJurnal(event)}>
+                                <option value='' disabled>Pilih Jurnal</option>
+                                {jurnal.map((j, i) => (
+                                    <option value={j.uraian}>{j.uraian}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                    <div className={selectedJurnal ? 'd-block' : 'd-none'}>
+                        <div className="form-inline form-group">
+                            <label className="form-control">Uraian: </label>
+                            <input className="mx-2 form-control" type="text" name="uraian"
+                                required 
+                                value={form.uraian}
+                                onChange={(e) => handleInput(e)}
+                            />
+                            <label className="form-control">Tanggal: </label>
+                            <input className="mx-2 form-control" type="date" name="tanggal"
+                                required
+                                value={form.tanggal}
+                                onChange={(e) => handleInput(e)}
+                            />
+                        </div>
+                        {form.details && form.details.map((catatan, index) => (
+                            <Entry key={index} id={index} catatan={catatan} akun={akun}
+                                handleChange={handleChange}
+                                deleteCatatan={deleteCatatan}
+                            />
+                        ))}
+                        <input 
+                            className="btn btn-primary"
+                            type="button" 
+                            value="Tambah Entry" 
+                            onClick={() => addCatatan()}
                         />
-                        <label className="form-control">Tanggal: </label>
-                        <input className="mx-2 form-control" type="date" name="tanggal"
-                            required
-                            value={form.tanggal}
-                            onChange={(e) => handleInput(e)}
+                        <input 
+                            className="mx-2 btn btn-primary"
+                            type="submit" 
+                            value="Submit"
+                            disabled={formValidator().sum !== 0}
                         />
                     </div>
-                    {form.details && form.details.map((catatan, index) => (
-                        <Entry key={index} id={index} catatan={catatan} akun={akun}
-                            handleChange={handleChange}
-                            deleteCatatan={deleteCatatan}
-                        />
-                    ))}
-                    <input 
-                        className="btn btn-primary"
-                        type="button" 
-                        value="Tambah Entry" 
-                        onClick={() => addCatatan()}
-                    />
-                    <input 
-                        className="mx-2 btn btn-primary"
-                        type="submit" 
-                        value="Submit"
-                        disabled={formValidator().sum !== 0}
-                    />
                 </form>
             </div>
         </div>
@@ -165,8 +195,8 @@ const Entry = (props) => {
     const { id, handleChange, deleteCatatan, catatan, akun } = props ? props : () => {}
     return(
         <div className="form-group form-inline">
-            <label className="form-control">{catatan.akun_ref ? catatan.akun_ref : '---'}</label>
-            <select className="form-control mx-2" value={catatan.akun_ref} name="akun" onChange={(e) => handleChange(id, e)} required>
+            <label className="form-control">{catatan.akun ? catatan.akun : '---'}</label>
+            <select className="form-control mx-2" value={catatan.akun} name="akun" onChange={(e) => handleChange(id, e)} required>
                 <option value='' disabled>Pilih Akun</option>
                 {akun && akun.map((item) => (
                     <option key={item.ref} value={item.ref}>{item.nama}</option>

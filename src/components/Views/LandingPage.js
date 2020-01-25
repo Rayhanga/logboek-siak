@@ -20,12 +20,12 @@ export default (props) => {
 const Item = (props) => {
     const { data } = props.data ? props : () => {}
 
-    const chartData = useMemo(() => [data.map((d, i) => (
+    const chartData = useMemo(() => [
         {
-            label: d.nama,
-            data: [[0,1]]
+            label: "Test",
+            data: [[0,0],[1,3], [4,3],[2,5]]
         }
-    ))]
+    ]
     ,[])
 
     console.log(chartData)
@@ -57,7 +57,7 @@ const Item = (props) => {
                         height: '300px'
                     }}
                 >
-                    <h1>*Masukkan Grafik Disini*</h1>
+                    {/* <h1>*Masukkan Grafik Disini*</h1> */}
                     <Chart 
                         data={chartData}
                         axes={axes} 

@@ -41,7 +41,7 @@ export default (props) => {
                             ))}
                         </select>
                         <label className="form-control">Periode: </label>
-                        <input className="mx-2 form-control" type="date" name="tmin"
+                        <input className="mx-2 form-control" type="date" name="tmin" required
                             max={form.tmax}
                             value={form.tmin}
                             onChange={(e) => handleInput(e)}
