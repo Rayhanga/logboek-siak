@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import { Chart } from 'react-charts'
 
 export default (props) => {
@@ -7,7 +7,7 @@ export default (props) => {
             <h1>Halaman Utama</h1>
             <div className="row">
                 <div className="col">
-                    <Item title="Saldo Akun" data={props.data.akun}/>
+                    <Item title="Saldo Akun Kas" dataset={props.data.akun}/>
                 </div>
                 {/* <div className="col-4">
                     <Item title=""/>
@@ -18,32 +18,50 @@ export default (props) => {
 }
 
 const Item = (props) => {
-    const { data } = props.data ? props : () => {}
+    const { dataset } = props.dataset ? props : () => {}
 
-    const chartData = useMemo(() => [
-        {
-            label: "Test",
-            data: [[0,0],[1,3], [4,3],[2,5]]
-        }
+    const lut = [
+        'D', 'K', 'K'
     ]
-    ,[])
 
-    console.log(chartData)
+    const dataSaldo = useMemo(() => {
+        const res = []
+        var x, sum = 0
+        for(x in dataset){
+            var y = 0, sum = 0
+            for(y in dataset[x].details){
+                sum = dataset[x].details[y].dk === lut[dataset[x].ref.charAt(0)-1] ? sum + dataset[x].details[y].nominal : sum - dataset[x].details[y]
+            }
+            sum = isNaN(sum) ? 0 : sum
+            let foo
+            dataset[x].ref.charAt(0) === '1'
+            ? res.push([
+                dataset[x].nama, sum
+            ])
+            : foo = NaN
+        }
+        return [{
+            label: 'Saldo Akhir',
+            data: res
+        }]
+    })
+
+    // console.log(dataSaldo)
 
     const series = useMemo(
-      () => ({
+        () => ({
         type: 'bar'
       }),
       []
     )
      
-      const axes = useMemo(
-        () => [
-          { primary: true, type: 'ordinal', position: 'bottom' },
-          { type: 'linear', position: 'left' }
-        ],
-        []
-      )
+    const axes = useMemo(
+    () => [
+        { primary: true, type: 'ordinal', position: 'bottom' },
+        { type: 'linear', position: 'left' }
+    ],
+    []
+    )
 
     return(
         <div className="card">
@@ -52,14 +70,13 @@ const Item = (props) => {
             </div>
             <div className="card-body">
                 <div
+                    className="m-3"
                     style={{
-                        width: '',
-                        height: '300px'
+                        height: '30vh'
                     }}
                 >
-                    {/* <h1>*Masukkan Grafik Disini*</h1> */}
                     <Chart 
-                        data={chartData}
+                        data={dataSaldo}
                         axes={axes} 
                         series={series}
                         tooltip/>
