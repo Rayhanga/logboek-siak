@@ -14,7 +14,6 @@ import DaftarAkun from '../Views/DaftarAkun'
 import Jurnal from '../Views/Jurnal'
 import BukuBesar from '../Views/BukuBesar'
 import LandingPage from '../Views/LandingPage'
-import DaftarBarang from '../Views/DaftarBarang'
 import ManajemenBarang from '../Views/ManajemenBarang'
 import PointOfSale from '../Views/PointOfSale'
 
@@ -53,6 +52,10 @@ export default () => {
   
   const addBarang = (barangBaru) => {
     fetcher('barang', 'POST', barangBaru).then(data => setBarang(data.barang_list))
+  }
+
+  const addStokBarang = (barang) => {
+    fetcher('barang/'+barang.id, 'PUT', {stok: barang.stok}).then(data => setBarang(data.barang_list))
   }
 
   const updateData = () => {
@@ -121,49 +124,51 @@ export default () => {
         <button className="vm-btn btn" onClick={() => setShow(!show)}>
           <i className="fa fa-align-justify" style={{fontSize: '24px'}}/>
         </button>
-      <Switch>
-        <Route exact path="/">
-          <LandingPage
-            data={{
-              akun: akun,
-              jurnal: jurnal,
-              barang: barang
-            }}
-          />
-        </Route>
-        <Route exact path="/jurnal">
-          <Jurnal
-            data={{
-              akun: akun,
-              jurnal: jurnal
-            }}
-            methods={{
-              add: addJurnal
-            }}
-          />
-        </Route>
-        <Route exact path="/bukubesar">
-          <BukuBesar
-            data={akun}
-          />
-        </Route>
-        <Route exact path="/pengaturan">
-          <DaftarAkun
-            data={akun}
-            add={addAkun}
-          />
-          <DaftarBarang
-            data={barang}
-            add={addBarang}
-          />
-        </Route>
-        <Route exact path="/barang">
-          <ManajemenBarang/>
-        </Route>
-        <Route exact path="/pos">
-          <PointOfSale/>
-        </Route>
-      </Switch>
+          <Switch>
+            <Route exact path="/">
+              <LandingPage
+                data={{
+                  akun: akun,
+                  jurnal: jurnal,
+                  barang: barang
+                }}
+              />
+            </Route>
+            <Route exact path="/jurnal">
+              <Jurnal
+                data={{
+                  akun: akun,
+                  jurnal: jurnal
+                }}
+                methods={{
+                  add: addJurnal
+                }}
+              />
+            </Route>
+            <Route exact path="/bukubesar">
+              <BukuBesar
+                data={akun}
+              />
+            </Route>
+            <Route exact path="/pengaturan">
+              <DaftarAkun
+                data={akun}
+                add={addAkun}
+              />
+            </Route>
+            <Route exact path="/barang">
+              <ManajemenBarang
+                data={barang}
+                methods={{
+                  add: addBarang,
+                  stk: addStokBarang
+                }}
+              />
+            </Route>
+            <Route exact path="/pos">
+              <PointOfSale/>
+            </Route>
+          </Switch>
         </main>
       </div>
     </div>
