@@ -9,12 +9,12 @@ export default ({jurnal, akun, show, add}) => {
         tanggal: formatDate(Date.now()),
         details: [
             {
-                akun: '',
+                akun_ref: '',
                 nominal: '',
                 dk: 'D'
             },
             {
-                akun: '',
+                akun_ref: '',
                 nominal: '',
                 dk: 'K'
             }
@@ -25,7 +25,7 @@ export default ({jurnal, akun, show, add}) => {
         formValidator()
         const { sum } = formValidator()
         const newArr = {
-            akun: '',
+            akun_ref: '',
             nominal: sum === 0 ? '' : (Math.abs(sum)).toString(),
             dk: sum <= 0 ? 'D' : 'K'
         }
@@ -52,7 +52,7 @@ export default ({jurnal, akun, show, add}) => {
         const { name, value } = event.target
 
         newArr[id] = {
-            akun: name === "akun" ? value : newArr[id].akun,
+            akun_ref: name === "akun" ? value : newArr[id].akun_ref,
             nominal: name === "nominal" ? value : newArr[id].nominal,
             dk: name === "dk" ? value : newArr[id].dk
         }
@@ -79,38 +79,42 @@ export default ({jurnal, akun, show, add}) => {
         const { value } = event.target
 
         selectJurnal(value)
-        const sj = jurnal.filter((j) => {return j.uraian === value})
-        if(sj[0]){
-            console.log(sj[0].details)
-            setForm({
-                tanggal: sj[0].tanggal.match(/[0-9]{4}\/[0-9]{2}\/[0-9]{2}/),
-                uraian: sj[0].uraian + ' (Revisi ' + formatDate(Date.now()) + ')',
-                details: sj[0].details
+        const sj = jurnal.find(j => j.uraian === value)
+        if(sj){
+            var i
+            const arr = sj.details
+            for(i in arr){
+                const x = arr[i].akun
+                const ak = akun.find(a => a.nama === x)
+                arr[i]={
+                    akun_ref: ak.ref,
+                    nominal: arr[i].nominal,
+                    dk: arr[i].dk,
+                }
+            }
+            selectJurnal({
+                tanggal: sj.tanggal.slice(0,10).replace(/\//g, '-'),
+                uraian: sj.uraian + ' (Revisi ' + formatDate(Date.now()) + ')',
+                details: arr
             })
+            setForm({
+                tanggal: formatDate(Date.now()),
+                uraian: sj.uraian + ' (Revisi ' + formatDate(Date.now()) + ')',
+                details: arr
+            })
+        }else{
+            setForm({})
+            selectJurnal('')
         }
+        formValidator()
     }
 
-    const handleSubmit = (event) => {
-        
-        add(form)
+    const handleSubmit = (event) => {// add(form)
         console.log(form)
-        setForm({
-            uraian: '',
-            tanggal: formatDate(Date.now()),
-            details:
-            [
-                {
-                    akun: '',
-                    nominal: '',
-                    dk: 'D'
-                },
-                {
-                    akun: '',
-                    nominal: '',
-                    dk: 'K'
-                }
-            ]
-        })
+        console.log(selectedJurnal)
+            
+        setForm('')
+        selectJurnal('')
         event.preventDefault()
     }
 
@@ -118,7 +122,7 @@ export default ({jurnal, akun, show, add}) => {
         const { details, uraian } = form
         var a, sum = 0, akunValid = false
         for(a in details){
-            const { akun, dk, nominal } = details[a]
+            const { akun_ref, dk, nominal } = details[a]
             akunValid = !(akun === 'PK') 
             sum = dk === 'D' ? sum + parseFloat(nominal) : sum - parseFloat(nominal)
         }
@@ -127,8 +131,9 @@ export default ({jurnal, akun, show, add}) => {
         // const uraianValid = uraian !== '' || uraian.match(/^ *$/) === null
         // const notEmpty = details.length >= 2
 
+
         return {
-            sum: sum,
+            sum: sum
             // valid: akunValid && balanceValid && uraianValid && notEmpty
         }
     }
@@ -195,8 +200,8 @@ const Entry = (props) => {
     const { id, handleChange, deleteCatatan, catatan, akun } = props ? props : () => {}
     return(
         <div className="form-group form-inline">
-            <label className="form-control">{catatan.akun ? catatan.akun : '---'}</label>
-            <select className="form-control mx-2" value={catatan.akun} name="akun" onChange={(e) => handleChange(id, e)} required>
+            <label className="form-control">{catatan.akun_ref ? catatan.akun_ref : '---'}</label>
+            <select className="form-control mx-2" value={catatan.akun_ref} name="akun" onChange={(e) => handleChange(id, e)} required>
                 <option value='' disabled>Pilih Akun</option>
                 {akun && akun.map((item) => (
                     <option key={item.ref} value={item.ref}>{item.nama}</option>
