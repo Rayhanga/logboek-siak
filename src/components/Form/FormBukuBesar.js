@@ -5,8 +5,8 @@ import { formatDate } from '../../helper'
 export default (props) => {
     const [form, setForm] = useState({
         ref: '',
-        tmin: formatDate(Date.now()),
-        tmax: ''
+        tmin: formatDate(Date.now()).replace(/[0-9]{2}$/, '01'),
+        tmax: formatDate(Date.now()).replace(/[0-9]{2}$/, parseInt(formatDate(Date.now()).match(/[0-9]{2}$/))+1)
     })
 
     const { data } = props
