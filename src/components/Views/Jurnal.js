@@ -6,7 +6,8 @@ import FormRJ from '../Form/FormRJ'
 export default ({data, methods}) => {
     const [show, setShow] = useState({
         umum: false,
-        revisi: false
+        revisi: false,
+        daftar: false
     })
     const { akun, jurnal } = data ? data : () => {}
     const { add } = methods ? methods : () => {}
@@ -14,13 +15,17 @@ export default ({data, methods}) => {
     return(
         <div className="container">
             <h1>Jurnal</h1>
-            <input className="btn btn-primary" type="button" value="Catat Jurnal Umum" onClick={() => setShow({umum: !show.umum, revisi: false})}/>
-            <input className="btn btn-primary mx-2" type="button" value="Catat Jurnal Revisi" onClick={() => setShow({umum: false, revisi: !show.revisi})}/>
+            <input className="btn btn-primary mr-2" type="button" value="Catat Jurnal Umum" onClick={() => setShow({umum: !show.umum, revisi: false, daftar: false})}/>
+            <input className="btn btn-primary mx-2" type="button" value="Catat Jurnal Revisi" onClick={() => setShow({umum: false, revisi: !show.revisi, daftar: false})}/>
+            <input className="btn btn-primary mx-2" type="button" value="Lihat Daftar Jurnal" onClick={() => setShow({umum: false, revisi: false, daftar: !show.daftar})}/>
             <FormGJ akun={akun} show={show.umum} add={add}/>
             <FormRJ jurnal={jurnal} akun={akun} show={show.revisi} add={add}/>
-            {jurnal && jurnal.map((item) => (
-                <JurnalItem item={item}/>
-            ))}
+            <div className={show.daftar ? 'd-block' : 'd-none'}>
+                <h2 className="mt-3">Daftar Jurnal</h2>
+                {jurnal && jurnal.map((item) => (
+                    <JurnalItem item={item}/>
+                ))}
+            </div>
         </div>
     )
 }
