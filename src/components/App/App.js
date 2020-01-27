@@ -90,6 +90,7 @@ export default () => {
 
   const addPenjualanBarang = (penjualan) => {
     console.log(penjualan)
+    fetcher('jurnal', 'POST', penjualan).then(data => setJurnal(data.jurnal_list))
   }
 
   const updateData = () => {
@@ -207,7 +208,7 @@ export default () => {
                 data={{
                   barang: barang
                 }}
-                add={addPenjualanBarang}
+                add={addJurnal}
               />
             </Route>
           </Switch>
