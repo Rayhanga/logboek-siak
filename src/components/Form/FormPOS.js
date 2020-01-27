@@ -1,49 +1,42 @@
 import React, { useState } from "react"
 
-import { formatDate } from '../../helper'
+import { formatDate, numberSep } from '../../helper'
 
-export default ({akun, show, add}) => {
+export default ({barang, show, add}) => {
     const [form, setForm] = useState({
-        uraian: '',
+        uraian: 'Penjualan '+formatDate(Date.now()),
         tanggal: formatDate(Date.now()),
         details: [
             {
-                akun_ref: '',
-                nominal: '',
-                dk: 'D'
-            },
-            {
-                akun_ref: '',
-                nominal: '',
-                dk: 'K'
+                barang_id: '',
+                jumlah: ''
             }
         ]
     })
 
-    const addCatatan = () => {
-        formValidator()
-        const { sum } = formValidator()
+    const [profit, setProfit] = useState(0)
+
+    const addBarang = () => {
         const newArr = {
-            akun_ref: '',
-            nominal: sum === 0 ? '' : (Math.abs(sum)).toString(),
-            dk: sum <= 0 ? 'D' : 'K'
+            barang_id: '',
+            jumlah: ''
         }
 
         setForm({
             uraian: form.uraian,
+            tanggal: form.tanggal,
             details: [...form.details, newArr]
         })
     }
 
-    const deleteCatatan = (id) => {
+    const deleteBarang = (index) => {
         const arr = form.details
-        const newArr = arr.filter((item, j) => id !== j)
+        const newArr = arr.filter((item, j) => index !== j)
         setForm({
             uraian: form.uraian,
+            tanggal: form.tanggal,
             details: newArr
         })
-
-        formValidator()
     }
 
     const handleChange = (id, event) => {
@@ -51,75 +44,50 @@ export default ({akun, show, add}) => {
         const { name, value } = event.target
 
         newArr[id] = {
-            akun_ref: name === "akun" ? value : newArr[id].akun_ref,
-            nominal: name === "nominal" ? value : newArr[id].nominal,
-            dk: name === "dk" ? value : newArr[id].dk
+            barang_id: name === "barang" ? value : newArr[id].barang_id,
+            jumlah: name === "jumlah" ? value : newArr[id].jumlah
         }
 
         setForm({
             uraian: form.uraian,
+            tanggal: form.tanggal,
             details: newArr
         })
-
-        formValidator()
-    }
-
-    const handleInput = (event) => {
-        const { name, value } = event.target
-        setForm({
-            tanggal: name === 'tanggal' ? value : form.tanggal,
-            uraian: name === 'uraian' ? value : form.uraian, 
-            details: form.details
-        })
-        formValidator()
     }
 
     const handleSubmit = (event) => {
-        add(form)
-        console.log(form)
-        setForm({
-            uraian: '',
-            tanggal: formatDate(Date.now()),
-            details:
-            [
-                {
-                    akun_ref: '',
-                    nominal: '',
-                    dk: 'D'
-                },
-                {
-                    akun_ref: '',
-                    nominal: '',
-                    dk: 'K'
+        const final = {
+            uraian: form.uraian,
+            tanggal: form.tanggal,
+            details: []
+        }
+        var x
+        for(x in form.details){
+            const sb = barang.find(brg => brg.id.toString() === form.details[x].barang_id)
+            final.details[parseInt(x)+1] = {
+                akun_ref: '112',
+                nominal: form.details[x].jumlah * sb.harga_pokok,
+                dk: 'K',
+                dp: {
+                    barang_id: form.details[x].barang_id,
+                    nominal: form.details[x].jumlah
                 }
-            ]
-        })
+            }
+            setProfit(profit + form.details[x].jumlah * sb.harga_jual)
+        }
+        final.details[0] = {
+            akun_ref: '411',
+            nominal: profit,
+            dk: 'D'
+        }
+        console.log(final)
         event.preventDefault()
-    }
-
-    const formValidator = () => {
-        const { details, uraian } = form
-        var a, sum = 0, akunValid = false
-        for(a in details){
-            const { akun_ref, dk, nominal } = details[a]
-            akunValid = !(akun_ref === 'PK') 
-            sum = dk === 'D' ? sum + parseFloat(nominal) : sum - parseFloat(nominal)
-        }
-
-        const balanceValid = sum === 0
-        const uraianValid = uraian !== '' || uraian.match(/^ *$/) === null
-        const notEmpty = details.length >= 2
-
-        return {
-            sum: sum,
-            valid: akunValid && balanceValid && uraianValid && notEmpty
-        }
     }
 
     return (
         <div className={show ? 'd-block card mx-auto m-3' : 'd-none'}>
             <div className="card-header">
-                <h1>Catat Penjualan</h1> 
+                <h1>Point of Sale</h1> 
             </div>
             <div className="card-body">
                 <form className="form" onSubmit={(event) => handleSubmit(event)}>
@@ -127,33 +95,32 @@ export default ({akun, show, add}) => {
                         <label className="form-control">Uraian: </label>
                         <input className="mx-2 form-control" type="text" name="uraian"
                             required 
+                            disabled
                             value={form.uraian}
-                            onChange={(e) => handleInput(e)}
                         />
                         <label className="form-control">Tanggal: </label>
                         <input className="mx-2 form-control" type="date" name="tanggal"
                             required
+                            disabled
                             value={form.tanggal}
-                            onChange={(e) => handleInput(e)}
                         />
                     </div>
                     {form.details && form.details.map((catatan, index) => (
-                        <Entry key={index} id={index} catatan={catatan} akun={akun}
+                        <Entry key={index} id={index} catatan={catatan} barang={barang}
                             handleChange={handleChange}
-                            deleteCatatan={deleteCatatan}
+                            deleteCatatan={deleteBarang}
                         />
                     ))}
                     <input 
                         className="btn btn-primary"
                         type="button" 
                         value="Tambah Entry" 
-                        onClick={() => addCatatan()}
+                        onClick={() => addBarang()}
                     />
                     <input 
                         className="mx-2 btn btn-primary"
                         type="submit" 
                         value="Submit"
-                        disabled={formValidator().sum !== 0}
                     />
                 </form>
             </div>
@@ -162,27 +129,36 @@ export default ({akun, show, add}) => {
 }
 
 const Entry = (props) => {
-    const { id, handleChange, deleteCatatan, catatan, akun } = props ? props : () => {}
+    const { id, handleChange, deleteCatatan, catatan, barang } = props ? props : () => {}
+    const sb = barang.find(brg => brg.id.toString() === catatan.barang_id)
+
     return(
         <div className="form-group form-inline">
-            <label className="form-control">{catatan.akun_ref ? catatan.akun_ref : '---'}</label>
-            <select className="form-control mx-2" value={catatan.akun_ref} name="akun" onChange={(e) => handleChange(id, e)} required>
-                <option value='' disabled>Pilih Akun</option>
-                {akun && akun.map((item) => (
-                    <option key={item.ref} value={item.ref}>{item.nama}</option>
+            <label className="form-control">{catatan.barang_id && 'Stok: '+sb.stok}</label>
+            <select className="form-control mx-2" value={catatan.barang_id} name="barang" onChange={(e) => handleChange(id, e)} required>
+                <option value='' disabled>Pilih Barang</option>
+                {barang && barang.map((item) => (
+                    <option key={item.id} value={item.id}>{item.nama}</option>
                 ))}
             </select>
-            <input className="form-control mx-2" type="number" value={catatan.nominal} name="nominal" onChange={(e) => handleChange(id, e)} required/>
-            <select className="form-control mx-2" value={catatan.dk} name="dk" onChange={(e) => handleChange(id, e)}>
-                <option value="D">Debit</option>
-                <option value="K">Kredit</option>
-            </select>
-            {id > 1 && <input 
+            Rp.<label className="form-control mx-2">{catatan.barang_id && numberSep(sb.harga_pokok)}</label>
+            X
+            <input 
+                className="form-control skinny mx-2" value={catatan.nominal} 
+                type="number" name="jumlah" onChange={(e) => handleChange(id, e)} 
+                disabled={!catatan.barang_id} required
+                min={1} max={sb && sb.stok}
+            />
+            =
+            Rp.<label className="form-control mx-2">{catatan.barang_id && catatan.jumlah && numberSep(catatan.jumlah * sb.harga_pokok)}</label>
+            {id > 0 && 
+            <input 
                 className="btn btn-danger mx-2" 
                 type="button" 
                 value="X"
                 onClick={() => deleteCatatan(id)}
-            />}
+            />
+            }
         </div>
     )
 }

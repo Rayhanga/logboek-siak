@@ -6,10 +6,10 @@ export default (props) => {
         <div className="container">
             <h1>Halaman Utama</h1>
             <div className="row">
-                <div className="col m-3">
+                <div className="col-12 m-3">
                     <ChartSaldo title="Saldo Akun Kas" dataset={props.data.akun}/>
                 </div>
-                <div className="col m-3">
+                <div className="col-12 m-3">
                     <ChartBarang title="Stok Barang" dataset={props.data.barang}/>
                 </div>
             </div>
@@ -28,17 +28,16 @@ const ChartSaldo = (props) => {
         const res = []
         var x, sum = 0
         for(x in dataset){
-            var y = 0, sum = 0
+            var y = 0
             for(y in dataset[x].details){
                 sum = dataset[x].details[y].dk === lut[dataset[x].ref.charAt(0)-1] ? sum + dataset[x].details[y].nominal : sum - dataset[x].details[y]
             }
             sum = isNaN(sum) ? 0 : sum
-            let foo
             dataset[x].ref.charAt(0) === '1'
             ? res.push([
                 dataset[x].nama, sum
             ])
-            : foo = NaN
+            : res.push()
         }
         return [{
             label: 'Saldo Akhir',

@@ -70,3 +70,7 @@
   left: 0;
   z-index: 2;
 }
+
+.skinny{
+  max-width: 10vh;
+  }

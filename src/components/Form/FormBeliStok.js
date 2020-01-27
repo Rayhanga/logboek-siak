@@ -1,18 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+
+import { fetcher, numberSep } from '../../helper'
 
 export default (props) => {
     const [form, setForm] = useState({
         id: '',
-        stok: ''
+        stok: '',
+        harga_pokok: 0
     })
+
+    const [kas, setKas] = useState({saldo: 0})
+
+    const [barang, setBarang] = useState({harga_pokok: 0})
 
     const handleInput = (e) => {
         const { name, value } = e.target
         
         setForm({
             id: name === "id" ? value : form.id,
-            stok: name === "stok" ? value : form.stok
+            stok: name === "stok" ? value : form.stok,
+            // harga_pokok: 
         })
+
+        console.log(form)
+
+        console.log(form.id, barang.find((barang) => {return barang.id === parseInt(form.id)}))
     }
 
     const handleSubmit = (event) => {
@@ -24,7 +36,12 @@ export default (props) => {
         event.preventDefault()
     }
 
-    console.log(form)
+    useEffect(() => {
+        fetcher('akun', 'GET').then(data => setKas(data.akun_list.find(a => a.ref.toString() === '111')))
+        fetcher('barang', 'GET').then(data => setBarang(data.barang_list))
+    }, [])
+
+    // console.log(form)
 
     return(
         <div className={props.show ? 'd-block card mx-auto m-3' : 'd-none'}>
@@ -33,6 +50,9 @@ export default (props) => {
             </div>
             <div className="card-body">
                 <form className="form" onSubmit={(e) => handleSubmit(e)}>
+                    <div className="form-inline form-group">
+                        <label className="form-control">Saldo Kas: Rp.{kas && numberSep(kas.saldo - (barang.harga_pokok * form.stok))}</label>
+                    </div>
                      <div className="form-inline form-group">
                         <label className="form-control">Barang: </label>
                         <select className="mx-2 form-control" name="id" value={form.id} onChange={(e) => handleInput(e)} required>

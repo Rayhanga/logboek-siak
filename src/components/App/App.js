@@ -5,7 +5,7 @@ import {
   Route,
   Link
 } from 'react-router-dom'
-import { fetcher } from "../../helper"
+import { fetcher, formatDate } from "../../helper"
 
 import brand from '../../static/brand.png'
 import './App.css'
@@ -51,11 +51,30 @@ export default () => {
   }
   
   const addBarang = (barangBaru) => {
+    addJurnal({
+      uraian: 'Beli Barang (' + barangBaru.nama + ' x ' + barangBaru.stok + ')',
+      details:[
+        {
+          akun_ref: '112',
+          nominal: barangBaru.stok * barangBaru.harga_pokok,
+          dk: 'D'
+        },
+        {
+          akun_ref: '111',
+          nominal: barangBaru.stok * barangBaru.harga_pokok,
+          dk: 'K'
+        }
+      ]
+    })
     fetcher('barang', 'POST', barangBaru).then(data => setBarang(data.barang_list))
   }
 
   const addStokBarang = (barang) => {
     fetcher('barang/'+barang.id, 'PUT', {stok: barang.stok}).then(data => setBarang(data.barang_list))
+  }
+
+  const addPenjualanBarang = (penjualan) => {
+    console.log(penjualan)
   }
 
   const updateData = () => {
@@ -158,7 +177,10 @@ export default () => {
             </Route>
             <Route exact path="/barang">
               <ManajemenBarang
-                data={barang}
+                data={{
+                  barang: barang,
+                  akun: akun
+                }}
                 methods={{
                   add: addBarang,
                   stk: addStokBarang
@@ -166,7 +188,12 @@ export default () => {
               />
             </Route>
             <Route exact path="/pos">
-              <PointOfSale/>
+              <PointOfSale
+                data={{
+                  barang: barang
+                }}
+                add={addPenjualanBarang}
+              />
             </Route>
           </Switch>
         </main>

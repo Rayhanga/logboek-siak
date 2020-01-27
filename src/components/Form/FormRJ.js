@@ -119,11 +119,10 @@ export default ({jurnal, akun, show, add}) => {
     }
 
     const formValidator = () => {
-        const { details, uraian } = form
-        var a, sum = 0, akunValid = false
+        const { details } = form
+        var a, sum = 0
         for(a in details){
-            const { akun_ref, dk, nominal } = details[a]
-            akunValid = !(akun === 'PK') 
+            const { dk, nominal } = details[a] 
             sum = dk === 'D' ? sum + parseFloat(nominal) : sum - parseFloat(nominal)
         }
 
