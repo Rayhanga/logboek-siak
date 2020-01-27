@@ -11,7 +11,7 @@ export default (props) => {
 
     const [kas, setKas] = useState({saldo: 0})
 
-    const [barang, setBarang] = useState({harga_pokok: 0})
+    const barang = props.data ? props.data : () => {}
 
     const handleInput = (e) => {
         const { name, value } = e.target
@@ -19,29 +19,28 @@ export default (props) => {
         setForm({
             id: name === "id" ? value : form.id,
             stok: name === "stok" ? value : form.stok,
-            // harga_pokok: 
+            harga_pokok:  selectedBarang ? selectedBarang.harga_pokok : form.harga_pokok,
+            nama:  selectedBarang ? selectedBarang.nama : form.nama
         })
-
-        console.log(form)
-
-        console.log(form.id, barang.find((barang) => {return barang.id === parseInt(form.id)}))
     }
 
     const handleSubmit = (event) => {
         props.add(form)
+        // console.log(form)
         setForm({
             id: '',
-            stok: ''
+            stok: '',
+            harga_pokok: 0,
+            nama:  ''
         })
         event.preventDefault()
     }
 
     useEffect(() => {
         fetcher('akun', 'GET').then(data => setKas(data.akun_list.find(a => a.ref.toString() === '111')))
-        fetcher('barang', 'GET').then(data => setBarang(data.barang_list))
     }, [])
 
-    // console.log(form)
+    const selectedBarang = barang.find(b => b.id === parseInt(form.id))
 
     return(
         <div className={props.show ? 'd-block card mx-auto m-3' : 'd-none'}>
@@ -51,18 +50,23 @@ export default (props) => {
             <div className="card-body">
                 <form className="form" onSubmit={(e) => handleSubmit(e)}>
                     <div className="form-inline form-group">
-                        <label className="form-control">Saldo Kas: Rp.{kas && numberSep(kas.saldo - (barang.harga_pokok * form.stok))}</label>
+                        <label className="form-control">Saldo Kas: Rp.{kas && numberSep(kas.saldo - (selectedBarang ? selectedBarang.harga_pokok * form.stok : form.stok ))}</label>
                     </div>
                      <div className="form-inline form-group">
                         <label className="form-control">Barang: </label>
                         <select className="mx-2 form-control" name="id" value={form.id} onChange={(e) => handleInput(e)} required>
                             <option disabled value=''>Pilih Barang</option>
-                            {props.data && props.data.map((item, i)=>(
+                            {barang && barang.map((item, i)=>(
                                 <option key={item.id} value={item.id}>{item.nama}</option>
                             ))}
                         </select>
                     </div>
                     {form.id &&
+                    <>
+                    <div className="form-inline form-group">
+                        <label className="mr-2 form-control">Harga Pokok: </label>
+                        Rp.<label className="mx-2 form-control">{selectedBarang && numberSep(selectedBarang.harga_pokok)}</label>
+                    </div>
                     <div className="form-inline form-group">
                         <label className="form-control">Jumlah Stok yang dibeli: </label>
                         <input className="mx-2 form-control" type="text" name="stok" 
@@ -71,6 +75,7 @@ export default (props) => {
                             onChange={(e) => handleInput(e)}
                         />
                     </div>
+                    </>
                     }
                     <input 
                         className="btn btn-primary"

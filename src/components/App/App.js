@@ -70,6 +70,21 @@ export default () => {
   }
 
   const addStokBarang = (barang) => {
+    addJurnal({
+      uraian: 'Beli Barang (' + barang.nama + ' x ' + barang.stok + ')',
+      details:[
+        {
+          akun_ref: '112',
+          nominal: barang.stok * barang.harga_pokok,
+          dk: 'D'
+        },
+        {
+          akun_ref: '111',
+          nominal: barang.stok * barang.harga_pokok,
+          dk: 'K'
+        }
+      ]
+    })
     fetcher('barang/'+barang.id, 'PUT', {stok: barang.stok}).then(data => setBarang(data.barang_list))
   }
 
