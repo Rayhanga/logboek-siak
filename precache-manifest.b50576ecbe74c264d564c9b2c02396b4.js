@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "fe12a07c0587a69441ce27e1cd25dde1",
+    "revision": "a5e814ea30f3c50bcc85ad1369b59bb2",
     "url": "/logboek-siak/index.html"
   },
   {
-    "revision": "b126a34dbc783ad09a65",
+    "revision": "c815fba277e0daa26560",
     "url": "/logboek-siak/static/css/main.09a5bf13.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/logboek-siak/static/js/2.63eacb2d.chunk.js.LICENSE"
   },
   {
-    "revision": "b126a34dbc783ad09a65",
-    "url": "/logboek-siak/static/js/main.17173e0c.chunk.js"
+    "revision": "c815fba277e0daa26560",
+    "url": "/logboek-siak/static/js/main.b52d24f4.chunk.js"
   },
   {
     "revision": "87d2b7989695e942fd35",
