@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import { Chart } from 'react-charts'
 
 export default (props) => {
+    console.log(props)
     return(
         <div className="container">
             <h1>Halaman Utama</h1>
@@ -20,25 +21,17 @@ export default (props) => {
 const ChartSaldo = (props) => {
     const { dataset } = props.dataset ? props : () => {}
 
-    const lut = [
-        'D', 'K', 'K'
-    ]
-
     const chartData = useMemo(() => {
-        const res = []
-        var x, sum = 0
-        for(x in dataset){
-            var y = 0
-            for(y in dataset[x].details){
-                sum = dataset[x].details[y].dk === lut[dataset[x].ref.charAt(0)-1] ? sum + dataset[x].details[y].nominal : sum - dataset[x].details[y]
-            }
-            sum = isNaN(sum) ? 0 : sum
-            dataset[x].ref.charAt(0) === '1'
-            ? res.push([
-                dataset[x].nama, sum
-            ])
-            : res.push()
+        const res = dataset.filter(a => a.ref.charAt(0) === '1')
+
+        var x
+        for(x in res){
+            res[x] = [
+                res[x].nama,
+                res[x].saldo
+            ]
         }
+        // console.log(res)
         return [{
             label: 'Saldo Akhir',
             data: res
@@ -87,25 +80,22 @@ const ChartSaldo = (props) => {
 const ChartBarang = (props) => {
     const { dataset } = props.dataset ? props : () => {}
 
+    console.log(dataset)
+
     const chartData = useMemo(() => {
-        // const res = []
-        // var x, sum = 0
-        // for(x in dataset){
-        //     var y = 0, sum = 0
-        //     for(y in dataset[x].details){
-        //         sum = dataset[x].details[y].dk === lut[dataset[x].ref.charAt(0)-1] ? sum + dataset[x].details[y].nominal : sum - dataset[x].details[y]
-        //     }
-        //     sum = isNaN(sum) ? 0 : sum
-        //     let foo
-        //     dataset[x].ref.charAt(0) === '1'
-        //     ? res.push([
-        //         dataset[x].nama, sum
-        //     ])
-        //     : foo = NaN
-        // }
+        const res = dataset
+        console.log(res, dataset)
+
+        var x
+        for(x in res){
+            res[x] = [
+                res[x].nama,
+                res[x].stok
+            ]
+        }
         return [{
-            label: 'Saldo Akhir',
-            data: [0,5]
+            label: 'Stok Akhir',
+            data: res
         }]
     })
 
