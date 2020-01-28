@@ -1,5 +1,6 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import { Chart } from 'react-charts'
+import { fetcher } from '../../helper'
 
 export default (props) => {
     console.log(props)
@@ -8,10 +9,10 @@ export default (props) => {
             <h1>Halaman Utama</h1>
             <div className="row">
                 <div className="col-12 m-3">
-                    <ChartSaldo title="Saldo Akun Kas" dataset={props.data.akun}/>
+                    <ChartSaldo title="Saldo Akun Kas" dataset={props.akun}/>
                 </div>
                 <div className="col-12 m-3">
-                    <ChartBarang title="Stok Barang" dataset={props.data.barang}/>
+                    <ChartBarang title="Stok Barang" dataset={props.barang}/>
                 </div>
             </div>
         </div>
@@ -79,8 +80,13 @@ const ChartSaldo = (props) => {
 
 const ChartBarang = (props) => {
     const { dataset } = props.dataset ? props : () => {}
+    // const [dataset, setDataset] = useState([])
 
     console.log(dataset)
+
+    // useEffect(() => {
+    //     fetcher('barang', 'GET').then(data => setDataset(data.barang_list))
+    // }, [dataset])
 
     const chartData = useMemo(() => {
         const res = dataset

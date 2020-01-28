@@ -97,8 +97,8 @@ export default () => {
   const updateData = () => {
     setShow(!show)
     fetcher('akun', 'GET').then(data => setAkun(data.akun_list))
-    fetcher('jurnal', 'GET').then(data => setJurnal(data.jurnal_list))
     fetcher('barang', 'GET').then(data => setBarang(data.barang_list))
+    fetcher('jurnal', 'GET').then(data => setJurnal(data.jurnal_list))
   }
   
   useEffect(()=>{
@@ -168,11 +168,8 @@ export default () => {
           <Switch>
             <Route exact path="/">
               <LandingPage
-                data={{
-                  akun: akun,
-                  jurnal: jurnal,
-                  barang: barang
-                }}
+                akun={akun}
+                barang={barang}
               />
             </Route>
             <Route exact path="/jurnal">
