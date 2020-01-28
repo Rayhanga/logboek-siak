@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/logboek-siak/precache-manifest.b50576ecbe74c264d564c9b2c02396b4.js"
+  "/logboek-siak/precache-manifest.ce509fa2395dad244e256a0ec7f9d4c8.js"
 );
 
 self.addEventListener('message', (event) => {
