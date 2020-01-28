@@ -5,7 +5,7 @@ import {
   Route,
   Link
 } from 'react-router-dom'
-import { fetcher, formatDate } from "../../helper"
+import { fetcher } from "../../helper"
 
 import brand from '../../static/brand.png'
 import './App.css'
@@ -16,6 +16,7 @@ import BukuBesar from '../Views/BukuBesar'
 import LandingPage from '../Views/LandingPage'
 import ManajemenBarang from '../Views/ManajemenBarang'
 import PointOfSale from '../Views/PointOfSale'
+import Neraca from '../Views/Neraca'
 
 export default () => {
   const [akun, setAkun] = useState([])
@@ -88,10 +89,10 @@ export default () => {
     fetcher('barang/'+barang.id, 'PUT', {stok: barang.stok}).then(data => setBarang(data.barang_list))
   }
 
-  const addPenjualanBarang = (penjualan) => {
-    console.log(penjualan)
-    fetcher('jurnal', 'POST', penjualan).then(data => setJurnal(data.jurnal_list))
-  }
+  // const addPenjualanBarang = (penjualan) => {
+  //   console.log(penjualan)
+  //   fetcher('jurnal', 'POST', penjualan).then(data => setJurnal(data.jurnal_list))
+  // }
 
   const updateData = () => {
     setShow(!show)
@@ -133,6 +134,11 @@ export default () => {
               <i className="fa fa-bank" style={{fontSize: '24px'}}/> Buku Besar
             </Link>
           </span>
+          <span onClick={() => updateData()}>
+            <Link to="/neraca">
+              <i className="fa fa-balance-scale" style={{fontSize: '24px'}}/> Neraca
+            </Link>
+          </span> 
           <span onClick={() => updateData()}>
             <Link to="/pos">
               <i className="fa fa-money" style={{fontSize: '24px'}}/> <i>Point of Sale</i> (POS)
@@ -209,6 +215,18 @@ export default () => {
                   barang: barang
                 }}
                 add={addJurnal}
+              />
+            </Route>
+            <Route exact path="/neraca">
+              <Neraca
+                data={{
+                  akun: akun,
+                  jurnal: jurnal,
+                  barang: barang
+                }}
+                methods={{
+                  add: addJurnal
+                }}
               />
             </Route>
           </Switch>
