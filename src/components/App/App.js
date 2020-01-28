@@ -120,37 +120,37 @@ export default () => {
             </div>
           </span>
           <span onClick={() => updateData()}>
-            <Link to="/logboek/">
+            <Link to="/logboek-siak/">
               <i className="fa fa-home" style={{fontSize: '24px'}}/> Landing Page
             </Link>
           </span>
           <span onClick={() => updateData()}>
-            <Link to="/logboek/jurnal/">
+            <Link to="/logboek-siak/jurnal/">
               <i className="fa fa-book" style={{fontSize: '24px'}}/> Jurnal
             </Link>
           </span>
           <span onClick={() => updateData()}>
-            <Link to="/logboek/bukubesar/">
+            <Link to="/logboek-siak/bukubesar/">
               <i className="fa fa-bank" style={{fontSize: '24px'}}/> Buku Besar
             </Link>
           </span>
           <span onClick={() => updateData()}>
-            <Link to="/logboek/neraca/">
+            <Link to="/logboek-siak/neraca/">
               <i className="fa fa-balance-scale" style={{fontSize: '24px'}}/> Neraca
             </Link>
           </span> 
           <span onClick={() => updateData()}>
-            <Link to="/logboek/pos/">
+            <Link to="/logboek-siak/pos/">
               <i className="fa fa-money" style={{fontSize: '24px'}}/> <i>Point of Sale</i> (POS)
             </Link>
           </span>
           <span onClick={() => updateData()}>
-            <Link to="/logboek/barang/">
+            <Link to="/logboek-siak/barang/">
               <i className="fa fa-archive" style={{fontSize: '24px'}}/> Manajemen Barang
             </Link>
           </span>
           <span onClick={() => updateData()}>
-            <Link to="/logboek/pengaturan/">
+            <Link to="/logboek-siak/pengaturan/">
               <i className="fa fa-cog" style={{fontSize: '24px'}}/> Pengaturan
             </Link>
           </span>
@@ -166,13 +166,13 @@ export default () => {
           <i className="fa fa-align-justify" style={{fontSize: '24px'}}/>
         </button>
           <Switch>
-            <Route exact path="/logboek/">
+            <Route exact path="/logboek-siak/">
               <LandingPage
                 akun={akun}
                 barang={barang}
               />
             </Route>
-            <Route exact path="/logboek/jurnal/">
+            <Route exact path="/logboek-siak/jurnal/">
               <Jurnal
                 data={{
                   akun: akun,
@@ -183,18 +183,18 @@ export default () => {
                 }}
               />
             </Route>
-            <Route exact path="/logboek/bukubesar/">
+            <Route exact path="/logboek-siak/bukubesar/">
               <BukuBesar
                 data={akun}
               />
             </Route>
-            <Route exact path="/logboek/pengaturan/">
+            <Route exact path="/logboek-siak/pengaturan/">
               <DaftarAkun
                 data={akun}
                 add={addAkun}
               />
             </Route>
-            <Route exact path="/logboek/barang/">
+            <Route exact path="/logboek-siak/barang/">
               <ManajemenBarang
                 data={{
                   barang: barang,
@@ -206,7 +206,7 @@ export default () => {
                 }}
               />
             </Route>
-            <Route exact path="/logboek/pos/">
+            <Route exact path="/logboek-siak/pos/">
               <PointOfSale
                 data={{
                   barang: barang
@@ -214,7 +214,7 @@ export default () => {
                 add={addJurnal}
               />
             </Route>
-            <Route exact path="/logboek/neraca/">
+            <Route exact path="/logboek-siak/neraca/">
               <Neraca
                 data={{
                   akun: akun,
