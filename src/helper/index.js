@@ -1,4 +1,4 @@
-const API = 'http://127.0.0.1:5000/api/v1.0/'
+const API = 'https://logboek-siak.herokuapp.com/api/v1.0/'
 
 export const fetcher = async (uri, method, payload) => {
   const response = await 
