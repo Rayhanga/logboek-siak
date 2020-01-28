@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/logboek-siak/static/css/main.09a5bf13.chunk.css",
-    "main.js": "/logboek-siak/static/js/main.0e10fb9a.chunk.js",
-    "main.js.map": "/logboek-siak/static/js/main.0e10fb9a.chunk.js.map",
+    "main.js": "/logboek-siak/static/js/main.bc68ab9b.chunk.js",
+    "main.js.map": "/logboek-siak/static/js/main.bc68ab9b.chunk.js.map",
     "runtime-main.js": "/logboek-siak/static/js/runtime-main.04d52ab0.js",
     "runtime-main.js.map": "/logboek-siak/static/js/runtime-main.04d52ab0.js.map",
     "static/js/2.63eacb2d.chunk.js": "/logboek-siak/static/js/2.63eacb2d.chunk.js",
     "static/js/2.63eacb2d.chunk.js.map": "/logboek-siak/static/js/2.63eacb2d.chunk.js.map",
     "index.html": "/logboek-siak/index.html",
-    "precache-manifest.ce509fa2395dad244e256a0ec7f9d4c8.js": "/logboek-siak/precache-manifest.ce509fa2395dad244e256a0ec7f9d4c8.js",
+    "precache-manifest.52b235e6a233067c253c3e3cb9cae2bf.js": "/logboek-siak/precache-manifest.52b235e6a233067c253c3e3cb9cae2bf.js",
     "service-worker.js": "/logboek-siak/service-worker.js",
     "static/css/main.09a5bf13.chunk.css.map": "/logboek-siak/static/css/main.09a5bf13.chunk.css.map",
     "static/js/2.63eacb2d.chunk.js.LICENSE": "/logboek-siak/static/js/2.63eacb2d.chunk.js.LICENSE",
@@ -18,6 +18,6 @@
     "static/js/runtime-main.04d52ab0.js",
     "static/js/2.63eacb2d.chunk.js",
     "static/css/main.09a5bf13.chunk.css",
-    "static/js/main.0e10fb9a.chunk.js"
+    "static/js/main.bc68ab9b.chunk.js"
   ]
 }
